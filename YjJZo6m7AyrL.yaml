@@ -12,7 +12,7 @@ blueprint:
       name: AWTRIX Device
       description: Select the Awtrix 3 device
       selector:
-        device:
+        device: AWTRIX 3
           integration: mqtt
           manufacturer: Blueforcer
           model: 

@@ -10,12 +10,12 @@ blueprint:
   input:
     awtrix:
       name: AWTRIX Device
-      description: Select the Awtrix 3 device
+      description: Select the Awtrix light device
       selector:
-        device: AWTRIX 3
+        device:
           integration: mqtt
           manufacturer: Blueforcer
-          model: 
+          model: AWTRIX Light
           multiple: true
     power_source:
       name: Power Sensor

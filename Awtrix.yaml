@@ -40,7 +40,7 @@ blueprint:
     mqtt_topic:
       name: MQTT Topic
       description: The MQTT topic to publish data to
-      default: "ulanzi/custom/solar"
+      default: "awtrix/custom/solar"
       selector:
         text:
 
@@ -52,7 +52,7 @@ action:
   - service: mqtt.publish
     data:
       topic: !input mqtt_topic
-      payload: |-
+      payload: >
         {
           "text": "{{ states(input.entity) }}",
           "icon": "{{ input.icon }}",

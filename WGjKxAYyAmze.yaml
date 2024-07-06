@@ -1,12 +1,12 @@
 blueprint:
-  name: "AWTRIX Bitcoin"
-  description: "This blueprint will show the status of the exchange rate for the bitcoin in USD"
-  source_url: https://github.com/RDG88/Homeassistant_Blueprints/blob/main/bitcoin_awtrix_app.yaml
+  name: "AWTRIX Entity"
+  description: "This blueprint will show the content of an entity"
+  source_url: https://github.com/Lukutus/ha/edit/main/WGjKxAYyAmze.yaml
   domain: automation
   input:
     awtrix:
       name: AWTRIX 3
-      description: Select the Awtrix light
+      description: Select the Awtrix 3
       selector:
         device:
           integration: mqtt
@@ -19,15 +19,14 @@ blueprint:
       selector:
         text: {}
       default: bitcoin
-    bitcoin_sensor:
-      name: Bitcoin sensor
-      description: Bitcoin sensor
+    Sensor:
+      name: Sensor
+      description: Sensor
       selector:
         entity:
           multiple: false
-          filter:
-            - integration: bitcoin
-    bitcoin_icon:
+          
+    Icon:
       name: Icon
       description: Enter the Icon Name or ID of the icon that you like to show.
       selector:
@@ -51,8 +50,8 @@ blueprint:
               value: "2"
           mode: list
       default: "0"
-    txt_color_bitcoin:
-      name: Text Color for bitcoin
+    txt_color:
+      name: Text Color
       description: Select the Text color
       selector:
         color_rgb:
@@ -76,9 +75,9 @@ variables:
   awtrix: "{{ iif( device_attr(device_id, 'name_by_user') != none, device_attr(device_id,'name_by_user'), device_attr(device_id, 'name') ) }}"
   app: !input awtrix_app_name
   message_topic: "{{awtrix ~ '/custom/' ~ app }}"
-  icon: !input bitcoin_icon
-  txt_color_bitcoin: !input txt_color_bitcoin
-  sensor_bitcoin: !input bitcoin_sensor
+  icon: !input Icon
+  txt_color: !input txt_color
+  sensor: !input sensor
   push_icon: !input push_icon
   duration: !input duration
   repeat: !input repeat
@@ -87,14 +86,14 @@ variables:
 trigger:
   - platform: state
     entity_id:
-      - !input bitcoin_sensor
+      - !input sensor
   - platform: time_pattern
     seconds: /59
 condition:
   - condition: not
     conditions:
       - condition: state
-        entity_id: !input bitcoin_sensor
+        entity_id: !input sensor
         state: unavailable
 action:
   - service: mqtt.publish
@@ -102,8 +101,8 @@ action:
       topic: "{{ message_topic }}"
       payload: |-
         {   
-          "text": "{{ states(sensor_bitcoin) | round(0) }}",
-          "color": {{ txt_color_bitcoin }},
+          "text": "{{ states(sensor) | round(0) }}",
+          "color": {{ txt_color }},
           "icon": "{{ icon }}",
           "pushIcon": {{ push_icon }},
           "duration": {{ duration }},

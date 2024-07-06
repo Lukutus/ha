@@ -33,6 +33,29 @@ blueprint:
             - sensor
             - media_player
             - input_text
+    mqtt_broker:
+      name: MQTT Broker
+      description: The MQTT broker address
+      selector:
+        text:
+    mqtt_port:
+      name: MQTT Port
+      description: The MQTT broker port
+      default: 1883
+      selector:
+        number:
+          min: 1
+          max: 65535
+    mqtt_username:
+      name: MQTT Username
+      description: The MQTT broker username
+      selector:
+        text:
+    mqtt_password:
+      name: MQTT Password
+      description: The MQTT broker password
+      selector:
+        text:
     my_template_sensor:
       name: Template (Optional)
       description: Enter a template to format your sensor the way you like it. (Advanced mode)

@@ -1,26 +1,19 @@
 blueprint:
-  name: Send Three Entities Data via MQTT
-  description: This blueprint sends data from three entities via MQTT
+  name: Send Single Entity Data via MQTT
+  description: This blueprint sends data from a single entity via MQTT
   domain: automation
   input:
-    entity_1:
-      name: First Entity
-      description: The first entity to monitor
+    entity:
+      name: Entity
+      description: The entity to monitor
       selector:
         entity:
           domain: sensor
-    entity_2:
-      name: Second Entity
-      description: The second entity to monitor
+    icon:
+      name: Icon
+      description: The icon to include in the payload
       selector:
-        entity:
-          domain: sensor
-    entity_3:
-      name: Third Entity
-      description: The third entity to monitor
-      selector:
-        entity:
-          domain: sensor
+        text:
     mqtt_broker:
       name: MQTT Broker
       description: The MQTT broker address
@@ -44,24 +37,26 @@ blueprint:
       description: The MQTT broker password
       selector:
         text:
+    mqtt_topic:
+      name: MQTT Topic
+      description: The MQTT topic to publish data to
+      default: "ulanzi/custom/solar"
+      selector:
+        text:
 
 trigger:
   - platform: state
-    entity_id: !input entity_1
-  - platform: state
-    entity_id: !input entity_2
-  - platform: state
-    entity_id: !input entity_3
+    entity_id: !input entity
 
 action:
   - service: mqtt.publish
     data:
-      topic: "ulanzi/custom/solar"
+      topic: !input mqtt_topic
       payload_template: >
         {
-          "entity_1": {"text": "{{ states('<!input entity_1>') }}", "icon": "55909", "lifetime": "30"},
-          "entity_2": {"text": "{{ states('<!input entity_2>') }}", "icon": "51856", "lifetime": "30"},
-          "entity_3": {"text": "{{ states('<!input entity_3>') }}", "icon": "32930", "lifetime": "30"}
+          "text": "{{ states('<!input entity>') }}",
+          "icon": "{{ !input icon }}",
+          "lifetime": "30"
         }
       qos: 0
       retain: false

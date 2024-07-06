@@ -44,11 +44,6 @@ blueprint:
       description: The MQTT broker password
       selector:
         text:
-    mqtt_topic:
-      name: MQTT Topic
-      description: The MQTT topic to publish data to
-      selector:
-        text:
 
 trigger:
   - platform: state
@@ -61,21 +56,12 @@ trigger:
 action:
   - service: mqtt.publish
     data:
-      topic: !input mqtt_topic
+      topic: "ulanzi/custom/solar"
       payload_template: >
         {
-          "entity_1": "{{"text": "{{ states('<!input entity_1>') }}", "icon": "55909", "lifetime": "30" }}',
-          "entity_2": "{{"text": "{{ states('<!input entity_2>') }}", "icon": "51856", "lifetime": "30" }}',
-          "entity_3": "{{"text": "{{ states('<!input entity_3>') }}", "icon": "32930", "lifetime": "30" }}',
+          "entity_1": {"text": "{{ states('<!input entity_1>') }}", "icon": "55909", "lifetime": "30"},
+          "entity_2": {"text": "{{ states('<!input entity_2>') }}", "icon": "51856", "lifetime": "30"},
+          "entity_3": {"text": "{{ states('<!input entity_3>') }}", "icon": "32930", "lifetime": "30"}
         }
-      qos: 0
-      retain: false
-  - service: mqtt.publish
-    data:
-      topic: homeassistant/sensor/trigger
-      payload: '{
-          "entity_id": "{{ trigger.entity_id }}",
-          "new_state": "{{ trigger.to_state.state }}"
-        }'
       qos: 0
       retain: false

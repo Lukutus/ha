@@ -54,8 +54,8 @@ action:
       topic: !input mqtt_topic
       payload_template: >
         {
-          "text": "{{ states('<!input entity>') }}",
-          "icon": "{{ !input icon }}",
+          "text": "{{ states(input.entity) }}",
+          "icon": "{{ input.icon }}",
           "lifetime": "30"
         }
       qos: 0

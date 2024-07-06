@@ -64,9 +64,9 @@ action:
       topic: !input mqtt_topic
       payload_template: >
         {
-          "entity_1": "{{ states('<!input entity_1>') }}",
-          "entity_2": "{{ states('<!input entity_2>') }}",
-          "entity_3": "{{ states('<!input entity_3>') }}"
+          "entity_1": "{{"text": "{{ states('<!input entity_1>') }}", "icon": "55909", "lifetime": "30" }}',
+          "entity_2": "{{"text": "{{ states('<!input entity_2>') }}", "icon": "51856", "lifetime": "30" }}',
+          "entity_3": "{{"text": "{{ states('<!input entity_3>') }}", "icon": "32930", "lifetime": "30" }}',
         }
       qos: 0
       retain: false

@@ -52,7 +52,7 @@ action:
   - service: mqtt.publish
     data:
       topic: !input mqtt_topic
-      payload_template: >
+      payload: |-
         {
           "text": "{{ states(input.entity) }}",
           "icon": "{{ input.icon }}",

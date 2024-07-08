@@ -36,6 +36,29 @@ blueprint:
       selector:
         boolean:
       default: true
+    mqtt_broker:
+      name: MQTT Broker
+      description: The MQTT broker address
+      selector:
+        text:
+    mqtt_port:
+      name: MQTT Port
+      description: The MQTT broker port
+      default: 1883
+      selector:
+        number:
+          min: 1
+          max: 65535
+    mqtt_username:
+      name: MQTT Username
+      description: The MQTT broker username
+      selector:
+        text:
+    mqtt_password:
+      name: MQTT Password
+      description: The MQTT broker password
+      selector:
+        text:   
     language:
       name: Language
       description: Show the weather condition in this language

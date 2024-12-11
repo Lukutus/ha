@@ -85,9 +85,6 @@ action:
           - condition: trigger
             id: "On"
         sequence:
-          - repeat:
-              for_each: "{{ devices }}"
-              sequence:
                 - service: mqtt.publish
                   data:
                     qos: 0

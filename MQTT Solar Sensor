@@ -51,12 +51,7 @@ blueprint:
       description: The MQTT broker password
       selector:
         text:
-    mqtt_topic:
-      name: MQTT Topic
-      description: Enter the topic to publish the sensor data.
-      selector:
-        text: 
-
+   
 mode: queued
 
 trigger:
@@ -80,23 +75,29 @@ variables:
   mqtt_topic: !input mqtt_topic
 
 action:
-  - service: mqtt.publish
-    data:
-      qos: 0
-      retain: false
-      topic: "{{ mqtt_topic }}"
-      payload: |-
-        {
-          "pv": {
-            "power": {{ states(pv_sensor) | float(0) }},
-            "L1": {
-                "power": {{ states(l1_sensor) | float(0) }}
-            },
-            "L2": {
-                "power": {{ states(l2_sensor) | float(0) }}
-            },
-            "L3": {
-                "power": {{ states(l3_sensor) | float(0) }}
-            }
-          }
-        }
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: "On"
+        sequence:
+          - repeat:
+              for_each: "{{ devices }}"
+              sequence:
+                - service: mqtt.publish
+                  data:
+                    qos: 0
+                    retain: false
+                    topic: "{{ mqtt_topic }}"
+                    payload: |-
+                      {
+                        "pv": {
+                        "power": {{ states(pv_sensor) | float(0) }},
+                        "L1": {
+                        "power": {{ states(l1_sensor) | float(0) }}
+                      },
+                        "L2": {
+                        "power": {{ states(l2_sensor) | float(0) }}
+                      },
+                        "L3": {
+                        "power": {{ states(l3_sensor) | float(0) }}
+                      }

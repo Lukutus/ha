@@ -51,7 +51,12 @@ blueprint:
       description: The MQTT broker password
       selector:
         text:
-   
+    mqtt_topic:
+      name: MQTT Topic
+      description: The MQTT broker topic
+      selector:
+        text:
+
 mode: queued
 
 trigger:

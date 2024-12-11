@@ -1,0 +1,103 @@
+blueprint:
+  name: Solar Power MQTT Publisher
+  description: Publish solar power data to MQTT broker
+  domain: automation
+  author: Tobias Klose
+  input:
+    pv_sensor:
+      name: Solar Power Sensor
+      description: Select the sensor that measures the total solar power.
+      selector:
+        entity:
+          domain: sensor
+    l1_sensor:
+      name: DC Power Sensor L1
+      description: Select the sensor that measures power from DC1.
+      selector:
+        entity:
+          domain: sensor
+    l2_sensor:
+      name: DC Power Sensor L2
+      description: Select the sensor that measures power from DC2.
+      selector:
+        entity:
+          domain: sensor
+    l3_sensor:
+      name: DC Power Sensor L3
+      description: Select the sensor that measures power from DC3.
+      selector:
+        entity:
+          domain: sensor
+    mqtt_broker:
+      name: MQTT Broker
+      description: Enter the IP or domain name of the MQTT broker.
+      selector:
+        text: {}
+    mqtt_port:
+      name: MQTT Port
+      description: Enter the port number for the MQTT broker (default is 1883).
+      selector:
+        number:
+          min: 1
+          max: 65535
+          unit_of_measurement: "Port"
+          default: 1883
+    mqtt_username:
+      name: MQTT Username
+      description: Enter the username for the MQTT broker.
+      selector:
+        text: {}
+    mqtt_password:
+      name: MQTT Password
+      description: Enter the password for the MQTT broker.
+      selector:
+        text: {}
+    mqtt_topic:
+      name: MQTT Topic
+      description: Enter the topic to publish the sensor data.
+      selector:
+        text: {}
+
+mode: queued
+
+trigger:
+  - platform: state
+    entity_id:
+      - !input pv_sensor
+      - !input l1_sensor
+      - !input l2_sensor
+      - !input l3_sensor
+    id: "sensor_change"
+
+variables:
+  pv_sensor: !input pv_sensor
+  l1_sensor: !input l1_sensor
+  l2_sensor: !input l2_sensor
+  l3_sensor: !input l3_sensor
+  mqtt_broker: !input mqtt_broker
+  mqtt_port: !input mqtt_port
+  mqtt_username: !input mqtt_username
+  mqtt_password: !input mqtt_password
+  mqtt_topic: !input mqtt_topic
+
+action:
+  - service: mqtt.publish
+    data:
+      qos: 0
+      retain: false
+      topic: "{{ mqtt_topic }}"
+      payload: |-
+        {
+          "pv": {
+            "power": {{ states(pv_sensor) | float(0) }},
+            "L1": {
+                "power": {{ states(l1_sensor) | float(0) }}
+            },
+            "L2": {
+                "power": {{ states(l2_sensor) | float(0) }}
+            },
+            "L3": {
+                "power": {{ states(l3_sensor) | float(0) }}
+            }
+          }
+        }

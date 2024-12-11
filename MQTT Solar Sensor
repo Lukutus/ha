@@ -30,33 +30,32 @@ blueprint:
           domain: sensor
     mqtt_broker:
       name: MQTT Broker
-      description: Enter the IP or domain name of the MQTT broker.
+      description: The MQTT broker address
       selector:
-        text: {}
+        text:
     mqtt_port:
       name: MQTT Port
-      description: Enter the port number for the MQTT broker (default is 1883).
+      description: The MQTT broker port
+      default: 1883
       selector:
         number:
           min: 1
           max: 65535
-          unit_of_measurement: "Port"
-          default: 1883
     mqtt_username:
       name: MQTT Username
-      description: Enter the username for the MQTT broker.
+      description: The MQTT broker username
       selector:
-        text: {}
+        text:
     mqtt_password:
       name: MQTT Password
-      description: Enter the password for the MQTT broker.
+      description: The MQTT broker password
       selector:
-        text: {}
+        text:
     mqtt_topic:
       name: MQTT Topic
       description: Enter the topic to publish the sensor data.
       selector:
-        text: {}
+        text: 
 
 mode: queued
 

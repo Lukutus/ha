@@ -1,0 +1,38 @@
+blueprint:
+  name: Publish Sensor Data to MQTT
+  description: This blueprint publishes sensor data to an MQTT topic whenever the sensor state changes.
+  domain: automation
+  input:
+    sensor_entity:
+      name: Sensor Entity
+      description: The sensor entity to monitor.
+      selector:
+        entity:
+          domain: sensor
+    mqtt_topic:
+      name: MQTT Topic
+      description: The MQTT topic where the data will be published.
+      selector:
+        text: {}
+    mqtt_qos:
+      name: MQTT Quality of Service (QoS)
+      description: The QoS level for the MQTT message.
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 2
+          step: 1
+          unit_of_measurement: "qos"
+
+trigger:
+  platform: state
+  entity_id: !input 'sensor_entity'
+
+action:
+  - service: mqtt.publish
+    data:
+      topic: !input 'mqtt_topic'
+      payload: "{{ states('!input sensor_entity') }}"
+      qos: !input 'mqtt_qos'
+      retain: false
